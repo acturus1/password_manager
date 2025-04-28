@@ -1,19 +1,25 @@
 import string 
 import random
 import os
+import questionary
+
+def is_int(text):
+    return text.isdigit() or "Пожалуйста, введите целое число"
 
 if not os.path.isfile('.user_settings'):
-    mode_password = int(input('''Выберите режим: 
-    1 - Только заглавные английские буквы
-    2 - Заглавные и прописные английские буквы
-    3 - Цифры от 0 до 9
-    4 - Цифры и строчные буквы
-    5 - Цифры и буквы
-    6 - Цыфры и спец символы (!"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~)
-    7 - Цифры, буквы, спец символы: \n'''))
-    lenght_password = int(input('Введите длину пароля: \n'))
-    hash = int(input('Нужно ли хешировать пароли: 0 - нет; 1 - да: \n'))
-
+    mode_password = questionary.select('Выберите режим:',
+    [
+        '1 - Только заглавные английские буквы',
+        '2 - Заглавные и прописные английские буквы',
+        '3 - Цифры от 0 до 9',
+        '4 - Цифры и строчные буквы',
+        '5 - Цифры и буквы',
+        '''6 - Цыфры и спец символы (!"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~)''',
+        '7 - Цифры, буквы, спец символы'''
+    ]).ask()
+    mode_password = mode_password[:1]
+    lenght_password = questionary.text('Введите длину пароля:', validate=is_int).ask()
+    hash = questionary.confirm('Нужно ли хешировать пароли:').ask()
     with open('.user_settings', 'w') as f:
         f.write(f"{mode_password}\n")
         f.write(f"{lenght_password}\n")
@@ -26,7 +32,7 @@ with open('.user_settings', 'r') as f:
 
 mode = int(line[0])
 lenght_password = int(line[1])
-hash = int(line[2])
+hash = bool(line[2])
 
 password = list()
 
@@ -44,8 +50,7 @@ elif mode == 6:
     charapters = string.digits + string.punctuation
 elif mode == 7:
     charapters = string.ascii_letters + string.digits + string.punctuation
-else:
-    charapters = ''
+
 
 for i in range(lenght_password):
     password.append(random.choice(list(charapters)))
