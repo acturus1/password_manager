@@ -32,7 +32,6 @@ if not os.path.isfile('.user_settings'):
         f.write(f"{lenght_password}\n")
         f.write(f"{hash}\n")
     
-
 with open('.user_settings', 'r') as f:
     lines_not_remaked = f.readlines()
     line = [i.replace('\n', '') for i in lines_not_remaked]
@@ -41,9 +40,7 @@ mode = int(line[0])
 lenght_password = int(line[1])
 hash = bool(line[2])
 
-print(hash)
-
-password = list()
+password = ''
 
 if mode == 1:
     charapters = string.ascii_lowercase
@@ -61,7 +58,9 @@ elif mode == 7:
     charapters = string.ascii_letters + string.digits + string.punctuation
 
 
-for i in range(lenght_password):
-    password.append(random.choice(list(charapters)))
+sait = questionary.text('Введите имя сайта для которого предназначется этот пароль').ask()   
 
-print(password)
+for i in range(lenght_password):
+    password += random.choice(list(charapters))
+
+print(f"{sait} - {password}")
