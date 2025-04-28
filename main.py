@@ -2,6 +2,13 @@ import string
 import random
 import os
 import questionary
+import sqlite3
+
+con = sqlite3.connect('passwords.db')
+
+db = con.cursor()
+
+db.execute('''CREATE TABLE IF NOT EXISTS passwords(sait, password)''')
 
 def is_int(text):
     return text.isdigit() or "Пожалуйста, введите целое число"
@@ -33,6 +40,8 @@ with open('.user_settings', 'r') as f:
 mode = int(line[0])
 lenght_password = int(line[1])
 hash = bool(line[2])
+
+print(hash)
 
 password = list()
 
