@@ -21,12 +21,12 @@ if not os.path.isfile('.user_settings'):
         '3 - Цифры от 0 до 9',
         '4 - Цифры и строчные буквы',
         '5 - Цифры и буквы',
-        '''6 - Цыфры и спец символы (!"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~)''',
+        '''6 - Цифры и спец символы (!"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~)''',
         '7 - Цифры, буквы, спец символы'''
     ]).ask()
     mode_password = mode_password[:1]
     lenght_password = questionary.text('Введите длину пароля:', validate=is_int).ask()
-    hash = questionary.confirm('Нужно ли хешировать пароли:').ask()
+    hash = questionary.confirm('Нужно ли кодировать пароли:').ask()
     with open('.user_settings', 'w') as f:
         f.write(f"{mode_password}\n")
         f.write(f"{lenght_password}\n")
