@@ -180,3 +180,8 @@ crypto.key
 passwords.db
 salt.txt
 password.txt
+session.dat
+password.csv
+passwords.csv
+decode_1_step.py
+secret.txt
