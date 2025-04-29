@@ -178,3 +178,5 @@ cython_debug/
 test.py
 crypto.key
 passwords.db
+salt.txt
+password.txt
