@@ -174,7 +174,7 @@ cython_debug/
 .pypirc
 
 # Project 
-./.user_settings
+.user_settings
 test.py
 crypto.key
 passwords.db
