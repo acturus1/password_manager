@@ -3,6 +3,7 @@ import random
 import os
 import questionary
 import sqlite3
+import csv
 
 con = sqlite3.connect('passwords.db')
 
@@ -63,4 +64,18 @@ sait = questionary.text('Введите имя сайта для которог�
 for i in range(lenght_password):
     password += random.choice(list(charapters))
 
-print(f"{sait} - {password}")
+headers = [
+    "url", 
+    "username", 
+    "password", 
+    "httpRealm", 
+    "formActionOrigin", 
+    "guid", 
+    "timeCreated", 
+    "timeLastUsed", 
+    "timePasswordChanged"
+]
+
+with open('passwords.csv', 'w', encoding='utf-8', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(headers)

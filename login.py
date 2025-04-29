@@ -5,32 +5,43 @@ import base64
 import os
 import questionary
 import ast
+from session import session
 
-login = questionary.text('Введите ваш мастер пароль').ask()
+def login():
+    if session.check_session():
+        print('session')
 
-def derive_key(password, salt):
-    kdf = PBKDF2HMAC(
-        algorithm=hashes.SHA256(), 
-        length=32,                
-        salt=salt,               
-        iterations=100_000,     
-    )
-    key = base64.urlsafe_b64encode(kdf.derive(password.encode()))
-    return key
+    elif not session.check_session():
+        login = questionary.text('Введите ваш мастер пароль').ask()
 
-with open('salt.txt', 'rb') as f:
-    salt = f.read()
-    
-key = derive_key(login, salt)
+        def derive_key(password, salt):
+            kdf = PBKDF2HMAC(
+                algorithm=hashes.SHA256(), 
+                length=32,                
+                salt=salt,               
+                iterations=100_000,     
+            )
+            key = base64.urlsafe_b64encode(kdf.derive(password.encode()))
+            return key
 
-fernet = Fernet(key)
+        with open('salt.txt', 'rb') as f:
+            salt = f.read()
+            
+        key = derive_key(login, salt)
 
-with open('password.txt', 'rb') as f:
-    lines = f.read().split(b'\n')
-    encrypted_master = lines[0]
-    encrypted_key_for_file = lines[1]
+        fernet = Fernet(key)
 
-master = fernet.decrypt(encrypted_master).decode()
-key_for_file = fernet.decrypt(encrypted_key_for_file).decode()
-print(master)
-print(key_for_file)
+        with open('password.txt', 'rb') as f:
+            lines = f.read().split(b'\n')
+            encrypted_master = lines[0]
+            encrypted_key_for_file = lines[1]
+
+        master = fernet.decrypt(encrypted_master).decode()
+        key_for_file = fernet.decrypt(encrypted_key_for_file).decode()
+
+        print(master, key_for_file)
+
+        session.create_session()
+
+if __name__ == "__main__":  
+    login()
